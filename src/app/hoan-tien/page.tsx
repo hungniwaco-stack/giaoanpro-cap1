@@ -8,8 +8,9 @@ export default function RefundPage() {
     <LegalPage title="Chính sách hoàn tiền" updatedAt="31/08/2026">
       <h2>1. Trước khi mua</h2>
       <p>
-        Bạn được dùng thử miễn phí 2 lượt tạo giáo án trước khi quyết định mua gói. Vui lòng dùng
-        thử kỹ để đảm bảo sản phẩm phù hợp nhu cầu trước khi thanh toán.
+        Bạn được dùng thử miễn phí 3 lượt cho mỗi chức năng (Soạn giáo án, Đề thi, Bài tập, Trò
+        chuyện AI) trước khi quyết định mua gói. Vui lòng dùng thử kỹ để đảm bảo sản phẩm phù hợp
+        nhu cầu trước khi thanh toán.
       </p>
 
       <h2>2. Điều kiện hoàn tiền</h2>
