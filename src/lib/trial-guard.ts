@@ -35,7 +35,10 @@ async function ensureUid() {
 }
 
 async function getTrialEntry(uid: string): Promise<TrialEntry> {
-  return (await redis.get<TrialEntry>(`trial:${uid}`)) ?? { counts: {}, activatedUntil: null };
+  const entry = await redis.get<TrialEntry>(`trial:${uid}`);
+  // Old entries (pre per-feature quota) only had a flat `count` field, not
+  // `counts` — guard against that shape surviving in Redis and crashing here.
+  return { counts: entry?.counts ?? {}, activatedUntil: entry?.activatedUntil ?? null };
 }
 
 async function getIpEntry(ip: string): Promise<IpEntry> {
