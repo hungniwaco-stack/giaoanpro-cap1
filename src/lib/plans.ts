@@ -17,3 +17,5 @@ export const PLAN_LABEL: Record<Plan, string> = {
   "6M": "6 Tháng",
   "1Y": "1 Năm",
 };
+
+export const HIGHLIGHT_PLAN: Plan = "6M";

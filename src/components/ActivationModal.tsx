@@ -4,12 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAppStore } from "@/store/useAppStore";
+import { PLAN_LABEL, PLAN_PRICE_VND, HIGHLIGHT_PLAN, type Plan } from "@/lib/plans";
 
-const PLANS = [
-  { id: "1M", label: "1 Tháng", price: "99.000đ", highlight: false },
-  { id: "6M", label: "6 Tháng", price: "399.000đ", highlight: true },
-  { id: "1Y", label: "1 Năm", price: "599.000đ", highlight: false },
-];
+const PLANS: Plan[] = ["1M", "6M", "1Y"];
 
 const ZALO_LINK = "https://zalo.me/"; // ponytail: thay bằng link Zalo thật của bạn
 
@@ -61,20 +58,20 @@ export default function ActivationModal({ onClose }: { onClose: () => void }) {
           <div className="mt-4 grid grid-cols-3 gap-3">
             {PLANS.map((p) => (
               <div
-                key={p.id}
+                key={p}
                 className={`rounded-xl border p-3 text-center ${
-                  p.highlight
+                  p === HIGHLIGHT_PLAN
                     ? "border-pine bg-pine/10"
                     : "border-ink/10 bg-sand/50"
                 }`}
               >
-                {p.highlight && (
+                {p === HIGHLIGHT_PLAN && (
                   <div className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-pine-dark">
                     Bán chạy
                   </div>
                 )}
-                <div className="text-sm text-ink-muted">{p.label}</div>
-                <div className="mt-1 font-semibold text-ink">{p.price}</div>
+                <div className="text-sm text-ink-muted">{PLAN_LABEL[p]}</div>
+                <div className="mt-1 font-semibold text-ink">{PLAN_PRICE_VND[p].toLocaleString("vi-VN")}đ</div>
               </div>
             ))}
           </div>

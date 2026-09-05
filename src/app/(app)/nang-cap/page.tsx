@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAppStore } from "@/store/useAppStore";
-import { PLAN_LABEL, PLAN_PRICE_VND, type Plan } from "@/lib/plans";
+import { PLAN_LABEL, PLAN_PRICE_VND, HIGHLIGHT_PLAN, type Plan } from "@/lib/plans";
 
 const PLANS: Plan[] = ["1M", "6M", "1Y"];
 
@@ -113,15 +113,20 @@ export default function NangCapPage() {
 
       {!order ? (
         <div className="mt-6 rounded-2xl border border-ink/10 bg-paper-card p-6 shadow-sm">
-          <div className="grid grid-cols-3 gap-2">
+          <div className="mt-2 grid grid-cols-3 gap-2">
             {PLANS.map((p) => (
               <button
                 key={p}
                 onClick={() => setPlan(p)}
-                className={`rounded-xl border p-3 text-center transition ${
+                className={`relative rounded-xl border p-3 text-center transition ${
                   plan === p ? "border-pine bg-pine/10" : "border-ink/10 bg-sand/40"
                 }`}
               >
+                {p === HIGHLIGHT_PLAN && (
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-seal px-2 py-0.5 text-[9px] font-bold text-white">
+                    Bán chạy
+                  </span>
+                )}
                 <div className="text-sm text-ink-muted">{PLAN_LABEL[p]}</div>
                 <div className="mt-1 font-semibold text-ink">{PLAN_PRICE_VND[p].toLocaleString("vi-VN")}đ</div>
               </button>
