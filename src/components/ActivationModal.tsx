@@ -50,9 +50,10 @@ export default function ActivationModal({ onClose }: { onClose: () => void }) {
           exit={{ opacity: 0, y: 20, scale: 0.96 }}
           className="w-full max-w-lg rounded-2xl border border-ink/10 bg-paper-card p-6 shadow-2xl"
         >
-          <h2 className="font-display text-xl font-semibold text-ink">Bạn đã dùng hết lượt dùng thử</h2>
+          <h2 className="font-display text-xl font-semibold text-ink">🎉 Tuyệt vời! Bạn đã trải nghiệm đủ lượt miễn phí</h2>
           <p className="mt-1 text-sm text-ink-muted">
-            Kích hoạt để soạn giáo án không giới hạn, xuất file Word chuẩn Công văn 2345.
+            Nâng cấp ngay hôm nay để dùng <span className="font-semibold text-pine-dark">không giới hạn</span> cả 4 chức năng —
+            chỉ từ 99k, rẻ hơn 1 ly trà sữa mỗi tháng.
           </p>
 
           <div className="mt-4 grid grid-cols-3 gap-3">
