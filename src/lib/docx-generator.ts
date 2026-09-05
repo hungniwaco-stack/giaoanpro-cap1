@@ -29,7 +29,12 @@ function textCell(text: string, width: number) {
   });
 }
 
-export function generateLessonPlanDocx(plan: LessonPlan): Document {
+export interface TeacherInfo {
+  name: string;
+  school: string;
+}
+
+export function generateLessonPlanDocx(plan: LessonPlan, teacher?: TeacherInfo): Document {
   const activityRows = plan.hoatDong.flatMap((hd) => [
     new TableRow({
       children: [
@@ -63,6 +68,14 @@ export function generateLessonPlanDocx(plan: LessonPlan): Document {
               text: `Môn: ${plan.monHoc} — Lớp: ${plan.khoiLop} — Thời lượng: ${plan.thoiLuong}`,
               italics: true,
             })],
+          }),
+          new Paragraph({
+            children: [new TextRun({
+              text: `Trường: ${teacher?.school || "......................................."}          Giáo viên: ${teacher?.name || "......................................."}`,
+            })],
+          }),
+          new Paragraph({
+            children: [new TextRun({ text: "Ngày soạn: ..../..../........          Ngày dạy: ..../..../........" })],
           }),
           new Paragraph({ text: "" }),
 
