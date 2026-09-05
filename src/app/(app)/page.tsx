@@ -7,6 +7,7 @@ import { generateLessonPlanDocx, docxToBlob } from "@/lib/docx-generator";
 import { generateLessonPlanPptx, downloadPptx } from "@/lib/pptx-generator";
 import { lessonPlanToMarkdown } from "@/lib/export-text";
 import { KHOI_LOP, monHocTheoKhoi } from "@/lib/subjects";
+import { goiYBai } from "@/lib/goi-y-bai";
 import type { LessonPlan } from "@/lib/types";
 import ActivationModal from "@/components/ActivationModal";
 import ResultPanel from "@/components/ResultPanel";
@@ -125,9 +126,15 @@ export default function GiaoAnPage() {
                 value={tenBai}
                 onChange={(e) => setTenBai(e.target.value)}
                 maxLength={200}
+                list="goi-y-ten-bai"
                 placeholder="Ví dụ: Phép cộng trong phạm vi 10"
                 className="mt-1 w-full rounded-lg border border-ink/15 bg-white px-3 py-2 text-ink placeholder:text-ink-muted/50 outline-none focus:border-pine"
               />
+              <datalist id="goi-y-ten-bai">
+                {goiYBai(khoiLop, monHoc).map((b) => (
+                  <option key={b} value={b} />
+                ))}
+              </datalist>
             </div>
 
             <div className="mt-4">
