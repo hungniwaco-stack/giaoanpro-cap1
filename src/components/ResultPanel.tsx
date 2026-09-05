@@ -1,5 +1,6 @@
 "use client";
 
+import ReactMarkdown from "react-markdown";
 import StampSeal from "./StampSeal";
 
 export default function ResultPanel({
@@ -35,9 +36,21 @@ export default function ResultPanel({
 
       <div className="flex items-start gap-4 px-5 py-5">
         <StampSeal />
-        <pre className="max-h-96 flex-1 overflow-auto whitespace-pre-wrap font-sans text-sm text-ink-muted">
-          {markdown}
-        </pre>
+        <div className="max-h-96 flex-1 overflow-auto text-sm text-ink-muted">
+          <ReactMarkdown
+            components={{
+              h1: (p) => <h1 className="mb-2 font-display text-lg font-semibold text-ink" {...p} />,
+              h2: (p) => <h2 className="mb-2 mt-4 font-display text-base font-semibold text-ink" {...p} />,
+              h3: (p) => <h3 className="mb-1 mt-3 font-semibold text-ink" {...p} />,
+              p: (p) => <p className="mb-2 leading-relaxed" {...p} />,
+              ul: (p) => <ul className="mb-2 list-disc space-y-1 pl-5" {...p} />,
+              ol: (p) => <ol className="mb-2 list-decimal space-y-1 pl-5" {...p} />,
+              strong: (p) => <strong className="font-semibold text-ink" {...p} />,
+            }}
+          >
+            {markdown}
+          </ReactMarkdown>
+        </div>
       </div>
     </div>
   );
