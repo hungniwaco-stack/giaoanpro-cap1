@@ -2,15 +2,18 @@
 
 import ReactMarkdown from "react-markdown";
 import StampSeal from "./StampSeal";
+import type { HoatDong } from "@/lib/types";
 
 export default function ResultPanel({
   title,
   markdown,
+  openingActivity,
   onDownloadDocx,
   onDownloadPptx,
 }: {
   title: string;
   markdown: string;
+  openingActivity?: HoatDong;
   onDownloadDocx: () => void;
   onDownloadPptx: () => void;
 }) {
@@ -37,6 +40,14 @@ export default function ResultPanel({
       <div className="flex items-start gap-4 px-5 py-5">
         <StampSeal />
         <div className="max-h-96 flex-1 overflow-auto text-sm text-ink-muted">
+          {openingActivity && (
+            <div className="mb-4 rounded-xl border-2 border-dashed border-seal/40 bg-seal/5 p-4">
+              <p className="text-xs font-bold uppercase tracking-wide text-seal">
+                🎮 Khởi động vui — {openingActivity.ten}
+              </p>
+              <p className="mt-1 text-sm text-ink">{openingActivity.cachThucHien}</p>
+            </div>
+          )}
           <ReactMarkdown
             components={{
               h1: (p) => <h1 className="mb-2 font-display text-lg font-semibold text-ink" {...p} />,

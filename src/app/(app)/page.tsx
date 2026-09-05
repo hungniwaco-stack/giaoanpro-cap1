@@ -164,6 +164,7 @@ export default function GiaoAnPage() {
           <ResultPanel
             title="Chi Tiết Giáo Án"
             markdown={lessonPlanToMarkdown(lastPlan)}
+            openingActivity={lastPlan.hoatDong[0]}
             onDownloadDocx={() => downloadDocx(lastPlan)}
             onDownloadPptx={() => downloadPptx(generateLessonPlanPptx(lastPlan), `Giao-an-${lastPlan.tenBai.replace(/[^\p{L}\p{N}]+/gu, "-")}`)}
           />
