@@ -8,7 +8,7 @@ import { PLAN_LABEL, PLAN_PRICE_VND, HIGHLIGHT_PLAN, type Plan } from "@/lib/pla
 
 const PLANS: Plan[] = ["1M", "6M", "1Y"];
 
-const ZALO_LINK = "https://zalo.me/"; // ponytail: thay bằng link Zalo thật của bạn
+const ZALO_LINK = "https://zalo.me/0944851719";
 
 export default function ActivationModal({ onClose }: { onClose: () => void }) {
   const activate = useAppStore((s) => s.activate);
