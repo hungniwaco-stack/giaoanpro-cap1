@@ -3,6 +3,7 @@ import { Type } from "@google/genai";
 import { checkTrial, consumeTrial } from "@/lib/trial-guard";
 import { addHistoryEntry } from "@/lib/history-store";
 import { ai, GEMINI_MODEL } from "@/lib/gemini";
+import { parseMauGuide, mauGuidePromptBlock, type MauGuide } from "@/lib/mau-truong";
 
 const responseSchema = {
   type: Type.OBJECT,
@@ -29,7 +30,7 @@ const responseSchema = {
   required: ["tenBai", "monHoc", "khoiLop", "thoiLuong", "yeuCauCanDat", "doDungDayHoc", "hoatDong"],
 };
 
-function buildPrompt(monHoc: string, khoiLop: string, tenBai: string, trichDoanSgk?: string) {
+function buildPrompt(monHoc: string, khoiLop: string, tenBai: string, trichDoanSgk?: string, mau?: MauGuide) {
   const sgkBlock = trichDoanSgk
     ? `\nDưới đây là trích đoạn gốc từ sách giáo khoa cho đúng bài này — hãy bám sát nội dung, ví dụ, số liệu trong trích đoạn này thay vì tự suy diễn:\n"""\n${trichDoanSgk}\n"""\n`
     : "";
@@ -40,7 +41,7 @@ Hãy soạn một kế hoạch bài dạy chi tiết cho:
 - Môn học/Hoạt động giáo dục: ${monHoc}
 - Khối lớp: ${khoiLop}
 - Tên bài: ${tenBai}
-${sgkBlock}
+${sgkBlock}${mauGuidePromptBlock(mau)}
 Yêu cầu về nội dung (đúng cấu trúc Phụ lục 3 CV 2345, KHÔNG dùng cấu trúc Mục tiêu Kiến thức/Năng lực/Phẩm chất kiểu THCS):
 - "yeuCauCanDat": 3-5 gạch đầu dòng, mỗi gạch nêu rõ học sinh làm được gì / vận dụng được gì vào thực tế / hình thành phẩm chất-năng lực gì — viết theo động từ hành động, đo lường được, phù hợp học sinh tiểu học.
 - "doDungDayHoc": liệt kê ngắn gọn, thực tế (SGK, tranh ảnh, đồ dùng học tập, phiếu bài tập, máy chiếu nếu cần...).
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "trial_exhausted" }, { status: 402 });
   }
 
-  const { monHoc, khoiLop, tenBai, trichDoanSgk } = await req.json();
+  const { monHoc, khoiLop, tenBai, trichDoanSgk, mau } = await req.json();
   if (!monHoc || !khoiLop || !tenBai) {
     return NextResponse.json({ error: "Thiếu môn học, khối lớp hoặc tên bài" }, { status: 400 });
   }
@@ -70,11 +71,15 @@ export async function POST(req: NextRequest) {
   if (trichDoanSgk !== undefined && (typeof trichDoanSgk !== "string" || trichDoanSgk.length > 4000)) {
     return NextResponse.json({ error: "Trích đoạn SGK quá dài" }, { status: 400 });
   }
+  const mauGuide = parseMauGuide(mau);
+  if (!mauGuide.ok) {
+    return NextResponse.json({ error: "Thông tin mẫu của trường không hợp lệ hoặc quá dài" }, { status: 400 });
+  }
 
   try {
     const response = await ai.models.generateContent({
       model: GEMINI_MODEL,
-      contents: buildPrompt(monHoc, khoiLop, tenBai, trichDoanSgk),
+      contents: buildPrompt(monHoc, khoiLop, tenBai, trichDoanSgk, mauGuide.value),
       config: {
         responseMimeType: "application/json",
         responseSchema,

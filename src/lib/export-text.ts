@@ -8,6 +8,8 @@ export function lessonPlanToMarkdown(p: LessonPlan): string {
   return `# ${p.tenBai}
 **Môn:** ${p.monHoc} — **Lớp:** ${p.khoiLop} — **Thời lượng:** ${p.thoiLuong}
 
+**Ngày soạn:** ..../..../........ — **Tổng số tiết:** ........ — **Tiết:** ........
+
 ## I. Yêu cầu cần đạt
 ${bullets(p.yeuCauCanDat)}
 
@@ -25,6 +27,8 @@ ${p.hoatDong
 
 ## IV. Điều chỉnh sau bài dạy
 (Giáo viên ghi nhận sau khi dạy thực tế)
+
+**Duyệt của CM trường** — **Duyệt của Tổ trưởng** — **Giáo viên**
 `;
 }
 
