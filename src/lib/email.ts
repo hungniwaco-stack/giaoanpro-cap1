@@ -11,7 +11,7 @@ export async function sendActivationEmail(to: string, code: string, plan: Plan) 
     return;
   }
   const resend = new Resend(process.env.RESEND_API_KEY);
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to,
     subject: "Thanh toán thành công — Mã kích hoạt AI Giáo Án Pro",
@@ -26,6 +26,8 @@ export async function sendActivationEmail(to: string, code: string, plan: Plan) 
       </div>
     `,
   });
+  // SDK Resend trả lỗi trong `error` chứ không throw — không log thì gửi hỏng mà không ai biết.
+  if (error) console.error("Resend từ chối gửi email kích hoạt:", error);
 }
 
 const escapeHtml = (s: string) =>
@@ -38,10 +40,10 @@ export async function sendAffiliateEmail(to: string, name: string, code: string,
   const referralUrl = `${origin}/?ref=${code}`;
   if (!process.env.RESEND_API_KEY) {
     console.error("RESEND_API_KEY chưa cấu hình — bỏ qua gửi email cộng tác viên");
-    return { dashboardUrl };
+    return { dashboardUrl, sent: false };
   }
   const resend = new Resend(process.env.RESEND_API_KEY);
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to,
     subject: "Đăng ký cộng tác viên Giáo Án Pro thành công",
@@ -56,5 +58,6 @@ export async function sendAffiliateEmail(to: string, name: string, code: string,
       </div>
     `,
   });
-  return { dashboardUrl };
+  if (error) console.error("Resend từ chối gửi email cộng tác viên:", error);
+  return { dashboardUrl, sent: !error };
 }

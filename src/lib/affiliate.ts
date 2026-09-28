@@ -133,9 +133,9 @@ export async function listAffiliatesForAdmin() {
       const aff = await getAffiliate(code);
       if (!aff) return null;
       const { earned, paid, balance, orders } = await getAffiliateStats(code);
-      const { token: _token, ...safe } = aff;
-      void _token;
-      return { ...safe, earned, paid, balance, orders };
+      const { token, ...safe } = aff;
+      // Chủ hệ thống có khoá quản trị thì được xem link riêng của CTV — dùng để gửi tay khi email không tới.
+      return { ...safe, dashboardPath: `/doi-tac/xem?code=${aff.code}&t=${token}`, earned, paid, balance, orders };
     })
   );
   return rows.filter((r) => r !== null).sort((a, b) => b.balance - a.balance);

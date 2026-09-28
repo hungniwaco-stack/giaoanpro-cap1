@@ -9,7 +9,7 @@ const inputCls =
 export default function AffiliateSignupForm() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [done, setDone] = useState<{ email: string; devLink?: string } | null>(null);
+  const [done, setDone] = useState<{ email: string; emailSent: boolean; devLink?: string } | null>(null);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,7 +25,7 @@ export default function AffiliateSignupForm() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Đã có lỗi xảy ra");
-      setDone({ email: String(body.email), devLink: data.devLink });
+      setDone({ email: String(body.email), emailSent: data.emailSent !== false, devLink: data.devLink });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Đã có lỗi xảy ra");
     } finally {
@@ -36,8 +36,19 @@ export default function AffiliateSignupForm() {
   if (done) {
     return (
       <div className="rounded-2xl border border-pine/30 bg-pine/5 p-6 text-sm text-ink">
-        <p className="font-semibold text-pine-dark">Đã gửi link giới thiệu và link xem số liệu tới {done.email}</p>
-        <p className="mt-2 text-ink-muted">Kiểm tra hộp thư (cả mục Spam). Link xem số liệu là link riêng, không chia sẻ cho người khác.</p>
+        {done.emailSent ? (
+          <>
+            <p className="font-semibold text-pine-dark">Đã gửi link giới thiệu và link xem số liệu tới {done.email}</p>
+            <p className="mt-2 text-ink-muted">Kiểm tra hộp thư (cả mục Spam). Link xem số liệu là link riêng, không chia sẻ cho người khác.</p>
+          </>
+        ) : (
+          <>
+            <p className="font-semibold text-pine-dark">Đã ghi nhận đăng ký của bạn</p>
+            <p className="mt-2 text-ink-muted">
+              Hiện chưa gửi được email tới {done.email}. Vui lòng nhắn Zalo hỗ trợ (ở chân trang) để nhận link giới thiệu và link xem số liệu.
+            </p>
+          </>
+        )}
         {done.devLink && <p className="mt-2 break-all text-xs text-ink-muted">Môi trường thử: {done.devLink}</p>}
       </div>
     );

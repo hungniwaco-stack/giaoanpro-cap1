@@ -13,6 +13,7 @@ interface Row {
   paid: number;
   balance: number;
   orders: number;
+  dashboardPath: string;
 }
 
 const vnd = (n: number) => `${n.toLocaleString("vi-VN")}đ`;
@@ -84,6 +85,12 @@ export default function AffiliateAdminPage() {
                   <p className="mt-1 text-ink">
                     {r.bankName} — {r.accountNumber} — {r.accountName}
                   </p>
+                  <button
+                    onClick={() => navigator.clipboard.writeText(`${window.location.origin}${r.dashboardPath}`)}
+                    className="mt-1 text-xs font-medium text-pine hover:underline"
+                  >
+                    Sao chép link xem số liệu của CTV (gửi tay nếu email không tới)
+                  </button>
                   <p className="mt-1 text-xs text-ink-muted">
                     {r.orders} đơn · tổng {vnd(r.earned)} · đã chi {vnd(r.paid)}
                   </p>

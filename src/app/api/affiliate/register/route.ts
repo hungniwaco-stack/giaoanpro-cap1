@@ -25,9 +25,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Bạn đã gửi quá nhiều lần, vui lòng thử lại sau 1 giờ" }, { status: 429 });
     }
     const { aff, isNew } = await registerAffiliate({ name, email, bankName, accountName, accountNumber });
-    const { dashboardUrl } = await sendAffiliateEmail(aff.email, aff.name, aff.code, req.nextUrl.origin, aff.token);
+    const { dashboardUrl, sent } = await sendAffiliateEmail(aff.email, aff.name, aff.code, req.nextUrl.origin, aff.token);
     // Link chứa khoá bí mật chỉ đi qua email; riêng môi trường phát triển (chưa cấu hình email) trả về để thử.
-    return NextResponse.json({ ok: true, isNew, ...(process.env.NODE_ENV !== "production" ? { devLink: dashboardUrl } : {}) });
+    return NextResponse.json({ ok: true, isNew, emailSent: sent, ...(process.env.NODE_ENV !== "production" ? { devLink: dashboardUrl } : {}) });
   } catch (err) {
     console.error("Đăng ký cộng tác viên thất bại:", err);
     return NextResponse.json({ error: "Không đăng ký được lúc này, vui lòng thử lại sau" }, { status: 500 });
