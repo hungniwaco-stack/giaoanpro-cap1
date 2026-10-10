@@ -13,6 +13,7 @@ import { toMauGuide } from "@/lib/mau-truong";
 import type { LessonPlan } from "@/lib/types";
 import ActivationModal from "@/components/ActivationModal";
 import ResultPanel from "@/components/ResultPanel";
+import FeedbackPrompt from "@/components/FeedbackPrompt";
 import EmptyResult from "@/components/EmptyResult";
 
 export default function GiaoAnPage() {
@@ -27,6 +28,7 @@ export default function GiaoAnPage() {
   const [error, setError] = useState<string | null>(null);
   const [showPaywall, setShowPaywall] = useState(false);
   const [lastPlan, setLastPlan] = useState<LessonPlan | null>(null);
+  const [planKey, setPlanKey] = useState(0);
 
   function handleKhoiChange(k: string) {
     setKhoiLop(k);
@@ -63,6 +65,7 @@ export default function GiaoAnPage() {
 
       const plan = data as LessonPlan;
       setLastPlan(plan);
+      setPlanKey((k) => k + 1);
       addEntry("giao-an", plan.tenBai, plan);
       if (!isVip) useTrial("giao-an");
     } catch (e) {
@@ -178,13 +181,16 @@ export default function GiaoAnPage() {
         </div>
 
         {lastPlan ? (
-          <ResultPanel
-            title="Chi Tiết Giáo Án"
-            markdown={lessonPlanToMarkdown(lastPlan)}
-            openingActivity={lastPlan.hoatDong[0]}
-            onDownloadDocx={() => downloadDocx(lastPlan)}
-            onDownloadPptx={() => downloadPptx(generateLessonPlanPptx(lastPlan), `Giao-an-${lastPlan.tenBai.replace(/[^\p{L}\p{N}]+/gu, "-")}`)}
-          />
+          <div>
+            <ResultPanel
+              title="Chi Tiết Giáo Án"
+              markdown={lessonPlanToMarkdown(lastPlan)}
+              openingActivity={lastPlan.hoatDong[0]}
+              onDownloadDocx={() => downloadDocx(lastPlan)}
+              onDownloadPptx={() => downloadPptx(generateLessonPlanPptx(lastPlan), `Giao-an-${lastPlan.tenBai.replace(/[^\p{L}\p{N}]+/gu, "-")}`)}
+            />
+            <FeedbackPrompt key={planKey} context={`Lớp ${khoiLop} - ${monHoc}`} />
+          </div>
         ) : (
           <EmptyResult text="Điền thông tin bên trái và bấm Soạn giáo án để xem kết quả tại đây." />
         )}
