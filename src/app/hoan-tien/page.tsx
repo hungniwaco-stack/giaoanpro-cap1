@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
 
-export const metadata: Metadata = { title: "Chính sách hoàn tiền — Giáo Án Pro Cấp 1" };
+export const metadata: Metadata = {
+  title: "Chính sách hoàn tiền — Giáo Án Pro Cấp 1",
+  description: "Chính sách hoàn tiền Giáo Án Pro Cấp 1: điều kiện, thời hạn và cách yêu cầu hoàn tiền khi mua gói kích hoạt.",
+  alternates: { canonical: "/hoan-tien" },
+};
 
 export default function RefundPage() {
   return (

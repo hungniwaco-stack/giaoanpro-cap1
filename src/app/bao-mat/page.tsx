@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import LegalPage from "@/components/LegalPage";
 
-export const metadata: Metadata = { title: "Chính sách bảo mật — Giáo Án Pro Cấp 1" };
+export const metadata: Metadata = {
+  title: "Chính sách bảo mật — Giáo Án Pro Cấp 1",
+  description: "Giáo Án Pro Cấp 1 thu thập dữ liệu gì, lưu bao lâu, gửi đến những dịch vụ nào (Google Gemini, DeepSeek, SePay...) và cách yêu cầu xoá dữ liệu.",
+  alternates: { canonical: "/bao-mat" },
+};
 
 export default function PrivacyPage() {
   return (
